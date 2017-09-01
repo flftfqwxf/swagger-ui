@@ -91,7 +91,9 @@
             pre
             {
                 margin: 0;
-
+                padding:0;
+                background:none;
+                border:none;
                 @include text_headline(#fff);
             }
         }

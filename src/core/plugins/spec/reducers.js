@@ -28,6 +28,7 @@ export default {
   },
 
   [UPDATE_URL]: (state, action) => {
+      console.log(action.payload)
     return state.set("url", action.payload+"")
   },
 

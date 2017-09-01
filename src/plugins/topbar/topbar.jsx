@@ -12,7 +12,7 @@ export default class Topbar extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-    this.state = { url: props.specSelectors.url(), selectedIndex: 0 }
+    this.state = { url: props.specSelectors.url(), selectedIndex: 0,proxy:props.getConfigs().configs.proxy }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -24,9 +24,9 @@ export default class Topbar extends React.Component {
     this.setState({url: value})
   }
 
-  loadSpec = (url) => {
+  loadSpec = (url,proxy) => {
     this.props.specActions.updateUrl(url)
-    this.props.specActions.download(url)
+    this.props.specActions.download(url,proxy)
   }
 
   onUrlSelect =(e)=> {
@@ -37,7 +37,7 @@ export default class Topbar extends React.Component {
   }
 
   downloadUrl = (e) => {
-    this.loadSpec(this.state.url)
+    this.loadSpec(this.state.url,this.state.proxy)
     e.preventDefault()
   }
 
