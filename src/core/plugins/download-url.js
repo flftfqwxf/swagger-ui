@@ -9,7 +9,7 @@ export default function downloadUrlPlugin(toolbox) {
             url = url || specSelectors.url()
             // url = proxy ? proxy + url : url
             specActions.updateLoadingStatus("loading")
-            let ajaxUrl = proxy ? proxy + url : url
+            let ajaxUrl = proxy ? proxy + encodeURIComponent(url) : encodeURIComponent(url)
             console.log('download', ajaxUrl)
             fetch({
                 url: ajaxUrl,
@@ -27,6 +27,34 @@ export default function downloadUrlPlugin(toolbox) {
                 specActions.updateLoadingStatus("success")
                 specActions.updateSpec(res.text)
                 specActions.updateUrl(url)
+            }
+        },
+        saveCookie: (url, proxy, cookie) => ({errActions, specSelectors, specActions}) => {
+            let {fetch} = fn
+            url = url || specSelectors.url()
+            // url = proxy ? proxy + url : url
+            specActions.updateLoadingStatus("loading")
+            let ajaxUrl = proxy ? proxy + encodeURIComponent(url) : encodeURIComponent(url)
+            console.log('saveCookie', ajaxUrl)
+            console.log('cookie', cookie)
+            fetch({
+                url: ajaxUrl,
+                method: 'POST',
+                loadSpec: true,
+                credentials: "same-origin",
+                headers: {
+                    "Accept": "application/json,*/*"
+                },
+                body: JSON.stringify({
+                    cookie: cookie
+                })
+            }).then(next, next)
+            function next(res) {
+                if (res instanceof Error || res.status >= 400) {
+                    specActions.updateLoadingStatus("failed")
+                    return errActions.newThrownErr(new Error(res.statusText + " " + ajaxUrl))
+                }
+                specActions.updateLoadingStatus("success")
             }
         },
         updateLoadingStatus: (status) => {

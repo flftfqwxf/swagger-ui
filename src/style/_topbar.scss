@@ -46,6 +46,14 @@
             border-radius: 4px 0 0 4px;
             outline: none;
         }
+      label{
+        color: #fff;
+        font-size: 1.5em!important; padding:0 10px;
+      }
+      input.cookie-input{
+        width: 200px;
+        min-width: 100px;
+      }
 
         .select-label
         {
